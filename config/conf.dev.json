@@ -1,0 +1,84 @@
+{
+  "app": {
+		"_id": "632a86ebacdc0a575ba383b3",
+		"ip": "localhost",
+		"port": 6129,
+		"name": "ICare",
+		"exec_mode": "fork",
+		"instances": 1,
+		"codeCompany": "6129"
+	},
+  "database": {
+    "name": "icare",
+    "ip": "localhost",
+    "port": 27017,
+    "user": "",
+    "pwd": ""
+  },
+  "database-core": {
+    "ip": "localhost",
+    "port": 27017,
+    "name": "crm-core",
+    "user": "",
+    "pwd": "",
+    "mechanism": "",
+    "digestPassword": false
+  },
+  "core-app": {
+    "ip": "127.0.0.1",
+    "port": 2002,
+    "public-ip": "127.0.0.1",
+    "public-port": 2002
+  },
+  "services": {
+    "voice": 2010,
+    "chat": 2011,
+    "email": 2012
+  },
+  "activemq": {
+    "ip": "172.16.85.198",
+    "port": "61613",
+    "user": "admin",
+    "pwd": "admin",
+    "queueName": "icar-queue"
+  },
+  "recordPath": {
+    "path": "http://172.16.1.242:9001/"
+  },
+  "cisco": {
+    "ipApi": "https://172.16.86.244",
+    "username": "ccadmin@bhs.local",
+    "password": "Bhs24hs@123",
+    "auth": {
+      "username": "ccadmin@bhs.local",
+      "password": "Bhs24hs@123",
+      "sendImmediately": true
+    },
+    "apiCisco": {
+      "ip": "http://172.16.85.199:4242",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhcGkiLCJwd2QiOiJBUEllckAxMjMifQ.zbcraPNh7IvmAFX0D2dBjVfRB_vRzkAJA6P3BU3dh2E",
+      "callType": {
+        "voice": 5014,
+        "mail": 5013,
+        "chat": 5012,
+        "CT_IVR": 5016,
+        "CT_ToAgentGroup1": 5018,
+        "CT_ToAgentGroup2": 5025,
+        "CT_ToAgentGroup3": 5026,
+        "CT_Queue1": 5019,
+        "CT_Queue2": 5023,
+        "CT_Queue3": 5024
+      },
+      "callTypeTranfer": {
+        "voice": 5015,
+        "mail": 5016,
+        "chat": 5017
+      },
+      "skillGroup":{
+        "SG_Voice_1": 5158,
+        "SG_Voice_2": 5171,
+        "SG_Voice_3": 5171
+      }
+    }
+  }
+}

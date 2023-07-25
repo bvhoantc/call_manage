@@ -1,0 +1,105 @@
+{
+	"app": {
+		"_id": "632a86ebacdc0a575ba383b3",
+		"ip": "localhost",
+		"port": 6129,
+		"name": "ICare",
+		"exec_mode": "fork",
+		"instances": 1,
+		"codeCompany": "6129"
+	},
+	"database": {
+		"name": "icare",
+		"ip": "172.16.89.196",
+		"port": 27017,
+		"user": "",
+		"pwd": ""
+	},
+	"database-core": {
+		"ip": "172.16.86.162",
+		"port": 27017,
+		"name": "",
+		"user": "",
+		"pwd": "",
+		"mechanism": "",
+		"digestPassword": false
+	},
+	"core-app": {
+		"ip": "127.0.0.1",
+		"port": 6002,
+		"public-ip": "127.0.0.1",
+		"public-port": 6002
+	},
+	"services": {
+		"voice": 6010,
+		"chat": 6011,
+		"email": 6012
+	},
+	"activemq": {
+		"ip": "172.16.89.196",
+		"port": "61613",
+		"user": "admin",
+		"pwd": "admin",
+		"queueName": "icare"
+	},
+	"redis": {
+		"host": "localhost",
+		"port": "6379"
+	},
+	"cisco": {
+		"ipApi": "https://172.16.86.244",
+		"username": "ccadmin@bhs.local",
+		"password": "Bhs24hs@123",
+		"auth": {
+			"username": "ccadmin@bhs.local",
+			"password": "Bhs24hs@123",
+			"sendImmediately": true
+		},
+		"apiCisco": {
+			"ip": "http://172.16.86.186:4242",
+			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhcGkiLCJwd2QiOiJBUEllckAxMjMifQ.zbcraPNh7IvmAFX0D2dBjVfRB_vRzkAJA6P3BU3dh2E",
+			"callType": {
+				"voice": 5016,
+				"mail": 5013,
+				"chat": 5012,
+				"CT_IVR": 5016,
+				"CT_ToAgentGroup1": 5018,
+				"CT_ToAgentGroup2": 5025,
+				"CT_ToAgentGroup3": 5026,
+				"CT_Queue1": 5019,
+				"CT_Queue2": 5023,
+				"CT_Queue3": 5024
+			},
+			"callTypeTranfer": {
+				"voice": 5015,
+				"mail": 5016,
+				"chat": 5017
+			},
+			"skillGroup": {
+				"SG_Voice_1": 5158,
+				"SG_Voice_2": 5171,
+				"SG_Voice_3": 5171
+			}
+		}
+	},
+	"replicaSet": {
+		"replicaSetName": "mongo_rs",
+		"dbName": "icare",
+		"listMember": [
+			{
+				"ip": "172.16.86.162",
+				"port": 27017
+			},
+			{
+				"ip": "172.16.86.165",
+				"port": 27017
+			},
+			{
+				"ip": "172.16.86.166",
+				"port": 27017
+			}
+		],
+		"user": "crm",
+		"pwd": "ok110000"
+	}
+}
