@@ -12,14 +12,14 @@
 		"name": "do-an",
 		"ip": "13.239.2.145",
 		"port": 27017,
-		"user": "buihoan",
+		"user": "bvhoantc",
 		"pwd": "123456"
 	},
 	"database-core": {
 		"ip": "13.239.2.145",
 		"port": 27017,
 		"name": "do-an",
-		"user": "buihoan",
+		"user": "bvhoantc",
 		"pwd": "123456",
 		"mechanism": "",
 		"digestPassword": false
