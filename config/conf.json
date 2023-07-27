@@ -9,18 +9,18 @@
 		"codeCompany": "6129"
 	},
 	"database": {
-		"name": "do-an",
-		"ip": "13.239.2.145",
+		"name": "icall",
+		"ip": "18.162.190.48",
 		"port": 27017,
 		"user": "bvhoantc",
-		"pwd": "123456"
+		"pwd": "1520@123#"
 	},
 	"database-core": {
-		"ip": "13.239.2.145",
+		"ip": "18.162.190.48",
 		"port": 27017,
-		"name": "do-an",
+		"name": "icall",
 		"user": "bvhoantc",
-		"pwd": "123456",
+		"pwd": "1520@123#",
 		"mechanism": "",
 		"digestPassword": false
 	},
@@ -36,7 +36,7 @@
 		"email": 6012
 	},
 	"activemq": {
-		"ip": "13.236.183.67",
+		"ip": "18.163.3.62",
 		"port": "61613",
 		"user": "admin",
 		"pwd": "admin",
