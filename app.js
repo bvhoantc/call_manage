@@ -144,23 +144,7 @@ logger2.level = 'DEBUG';
 global.log = logger2;
 
 if (_config.database.user && _config.database.pwd) {
-    if (_config.replicaSet && _config.replicaSet.replicaSetName) {
-        global._dbPath = getConnRS(_config.replicaSet.user, _config.replicaSet.pwd);
-    } else {
-        global._dbPath = 'mongodb://' + _config.database.user + ':' + _config.database.pwd + '@' + _config.database.ip + ':' + _config.database.port + '/' + _config.database.name;
-    }
-}
-/**
- * Keep uid and pwd of database in envoirerment variable
- */
-if (process.env.DATABASE_UID && process.env.DATABASE_PWD) {
-    _config.database.user = process.env.DATABASE_UID;
-    _config.database.pwd = process.env.DATABASE_PWD;
-    if (_config.replicaSet && _config.replicaSet.replicaSetName) {
-        global._dbPath = getConnRS(_config.replicaSet.user, _config.replicaSet.pwd);
-    } else {
-        global._dbPath = 'mongodb://' + _config.database.user + ':' + _config.database.pwd + '@' + _config.database.ip + ':' + _config.database.port + '/' + _config.database.name;
-    }
+    global._dbPath = 'mongodb://' + _config.database.user + ':' + _config.database.pwd + '@' + _config.database.ip + ':' + _config.database.port + '/' + _config.database.name;
 }
 
 _initDBCallBack(_dbPath, _dbName, function (err, db, client) {
@@ -297,17 +281,5 @@ sio.on('connection', function (socket) {
 
 global._MailService = require(path.join(_rootPath, 'libs', 'mailService'));//Gửi SMS/Email
 
-// DUONGNB: Add interval check agent online to assign order
-require(path.join(_rootPath, 'monitor', 'order-monitor.js')).assignByInterval();
-function getConnRS(user,pwd) {
-    var connRS = 'mongodb://';
-    if(user && pwd) {
-        connRS += user + ':' + pwd + '@';
-    }
-    _config.replicaSet.listMember.forEach(function (mem) {
-        connRS += mem.ip + ':' + mem.port + ','
-    });
-    connRS = connRS.slice(0, -1).concat('/' + _config.replicaSet.dbName + '?replicaSet=' + _config.replicaSet.replicaSetName);
 
-    return connRS;
-}
+require(path.join(_rootPath, 'monitor', 'order-monitor.js')).assignByInterval();

@@ -46,13 +46,10 @@ module.exports = function routers(app) {
             case 4:
             case 5:
                 return _.without(obj[name][0].value, '0', '', null).join(', ');
-                break;
             case 6:
                 return _moment(obj[name][0].value).format('DD/MM/YYYY');
-                break;
             default:
                 return obj[name][0].value;
-                break;
         }
     };
 
@@ -78,8 +75,6 @@ module.exports = function routers(app) {
     app.get('/template', function (req, res) {
         let { page } = req.query;
         res.render('template', { page: page || "button" });
-
-        // _.render(req, res, 'button', { page: 'button', plugins: ['jquery-tmpl', 'knockout'] }, true);
     });
 
     app.get('/logout', function (req, res) {
@@ -125,7 +120,6 @@ module.exports = function routers(app) {
             }
 
             log.debug('login success');
-            console.log("success login ma", user)
             if (!_.has(_socketUsers, user._id)) _socketUsers[user._id] = { sid: [] };
             _socketUsers[user._id].monitor = require(path.join(_rootPath, 'monitor', 'user-monitor.js'))();
             user.deviceID = _body.deviceId;
@@ -133,7 +127,6 @@ module.exports = function routers(app) {
             _socketUsers[user._id].monitor.setDeviceID(_body.deviceId);
             _socketUsers[user._id].sessionID = req.sessionID;
 
-            //--- cuongnm email status
             _socketUsers[user._id].emailStatus = {
                 status: 1, // 0 : offline, 1 : online
                 statusChange: _moment().unix()
@@ -199,42 +192,6 @@ module.exports = function routers(app) {
                     });
                 }
             });
-
-            //_async.eachSeries(_.keys(_socketUsers), function(agentId, callback){
-            //    var monitor = _socketUsers[agentId.toString()].monitor;
-            //    var mes = null;
-            //
-            //    if(monitor && _.isEqual(agentId.toString(), user._id.toString())) mes = {
-            //        status: 200,
-            //        code: 404,
-            //        message: 'Tài khoản đã đăng nhập'
-            //    };
-            //
-            //    if(!mes && monitor && _.isEqual(_body.deviceId, monitor.getDeviceID())) mes = {
-            //        status: 200,
-            //        code: 404,
-            //        message: 'Extension đã sử dụng'
-            //    };
-            //    callback(mes);
-            //}, function(err){
-            //    if(!err){
-            //        QUEUE_Login.sendMsg({
-            //            messageType: 1,
-            //            user: user,
-            //            passWord: user.password,
-            //            deviceID: _body.deviceId,
-            //            kickOption: true,
-            //            tenant: _config.app._id
-            //        });
-            //
-            //        req.session['logged'] = true;
-            //        req.session['user'] = _.omit(user.toObject(), 'password', 'created');
-            //        req.session['menuAccess'] = {};
-            //        res.status(200).send({code: 200});
-            //    }else {
-            //        return res.status(err.status).send({code: err.code, message: err.message});
-            //    }
-            //});
         });
     });
 
@@ -418,27 +375,6 @@ module.exports = function routers(app) {
             if (error) return log.error(error);
         });
     });
-
-    // _async.waterfall([
-    //     function (next) {
-    //         _MailOption.findOne({ key: 'mail_option' }, next);
-    //     }
-    // ], function (err, mail) {
-    //     if (!mail) {
-    //         _MailOption.create({
-    //             key: "mail_option",
-    //             value: {
-    //                 host: "smtp.viettel.com.vn",
-    //                 port: 465,
-    //                 from: "Viettel CSKH <vanntt5@viettel.com.vn>",
-    //                 user: "vanntt5@viettel.com.vn",
-    //                 pass: "Viettel1!1"
-    //             }
-    //         })
-    //     }else{
-
-    //     }
-    // })
 
     var monitorManager = require(path.join(_rootPath, 'monitor', 'manager.js'));
     monitorManager.init();
