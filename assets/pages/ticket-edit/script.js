@@ -590,7 +590,7 @@ var DFT = function ($) {
                         if($('#errorTransferIcarHandle').val() == ''){
                             swal({
                                 title: 'Có lỗi xảy ra',
-                                text: 'Vui lòng nhập lỗi Chuyển ICAR Xủ Lý',
+                                text: 'Vui lòng nhập lỗi Chuyển ICALL Xủ Lý',
                                 type: "warning",
                                 confirmButtonColor: "#DD6B55",
                                 confirmButtonText: "Xác nhận!",

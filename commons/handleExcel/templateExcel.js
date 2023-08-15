@@ -1,5 +1,5 @@
 function templateExcel(startTime, endTime, titleTable, sheet, {
-  companyName = 'ICAR',
+  companyName = 'ICALL',
   companyNameMergeCell = ['A1', 'B1'],
   projectName = 'CHĂM SÓC KHÁCH HÀNG',
   projectNameMergeCell = ['A2', 'B2'],
