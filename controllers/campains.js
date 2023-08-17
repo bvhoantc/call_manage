@@ -289,20 +289,7 @@ exports.new = function(req, res) {
         },
         skillsGroup: function(next) {
             // get list skillGroup
-            _async.waterfall([
-                function(next) {
-                    // get list skill group form cisco 
-                    getListSkillGroupFromCisco(next)
-                },
-                function(dataNext, next) {
-                    // get list campain from cisco 
-                    getListCampaign(dataNext, next)
-                },
-                function(dataNext, next) {
-                    // get list skillGroup last
-                    selectSkillGroupCreateCampaign(dataNext, next)
-                },
-            ], next)
+            _SkillGroups.find({status: 1}, next)
         },
     }, function(err, result) {
         var user = result.agents

@@ -93,10 +93,10 @@ function importExcelData2MongoDB(filePath, fileNameReal, fields, req, res) {
                 console.log("IMPORT_CUSTOMER checkDate"); //nếu thông tin customerfield k có trường date thì k cần check đoạn này
                 let result2 = await checkDate(result1, fields)
 
-                // console.log("IMPORT_CUSTOMER check NĐ91");
-                // let result3 = await checkDoNotCall(result2)
+                console.log("IMPORT_CUSTOMER check NĐ91");
+                let result3 = await checkDoNotCall(result2)
 
-                return Promise.resolve(result2)
+                return Promise.resolve(result3)
             } catch (e) {
                 return Promise.reject(e)
             }
@@ -329,8 +329,33 @@ async function checkDate(excelData, fields) {
 function checkFormatPhone(arr) {
     arr.forEach(function (el, index) {
         el.field_so_dien_thoai = el.field_so_dien_thoai ? el.field_so_dien_thoai.toString() : "";
+        /* Xóa khoảng trắng trong số điện thoại */
+        el.field_so_dien_thoai = _.reduce(el.field_so_dien_thoai, (memo, c)=>{
+            if(c != ' '){
+                return memo.concat(c);
+            }
+            return memo
+        }, '');
+        /* số điện thoại bắt đầu bằng +84XXXXXX hoặc 84XXXXXX => 0XXXXXX */
+        if(el.field_so_dien_thoai.slice(0, 2) == '84'){
+            el.field_so_dien_thoai = el.field_so_dien_thoai.replace('84', '0');
+        }else if(el.field_so_dien_thoai.slice(0, 3) == '+84'){
+            el.field_so_dien_thoai = el.field_so_dien_thoai.replace('+84', '0');
+        }
         if (el.field_so_dien_thoai && el.field_so_dien_thoai.length > 0 && el.field_so_dien_thoai[0] != "0") {
             el.field_so_dien_thoai = "0" + el.field_so_dien_thoai
+        }
+
+        /* số điện thoại phải hoàn toàn là số và không chứa kí tự đặc biệt, độ dài 10 hoặc 11 số */
+        var phoneReg = new RegExp('^\\d+$');
+        if(!el.field_so_dien_thoai.toString().match(phoneReg)|| el.field_so_dien_thoai.toString().length < 10 || el.field_so_dien_thoai.toString().length > 11){
+            el.statusCheck = false
+            el.statusMessage = "Wrong form";
+            el.cellFail = []; // chứa các cell fail
+            el.cellFail.push("A" + (2 + index))
+        }else{
+            el.statusCheck = true
+            el.cellFail = []; // chứa các cell fail
         }
         return el;
     })
@@ -360,38 +385,18 @@ function checkDuplicate(arr) {
 async function checkDoNotCall(arr) {
     let listDoNotCall = await getListDonotCall();
 
+    let doNotCall = new Set(listDoNotCall)
+    console.log("lấy xong do not call");
     arr.forEach(function (el, index) {
-        // Kiểm tra số điện thoại có nằm trong danh sách donotcall không	
-        if (listDoNotCall.indexOf(el.field_so_dien_thoai) >= 0) {
-            el.statusCheck = false
-            el.statusMessage = "Do Not Call";
-            el.cellFail.push("A" + (2 + index))
+        if(el.statusCheck){
+            // Kiểm tra số điện thoại có nằm trong danh sách donotcall không	
+            if (doNotCall.has(el.field_so_dien_thoai)) {
+                el.statusCheck = false
+                el.statusMessage = "Do Not Call";
+                el.cellFail.push("A" + (2 + index))
+            }
+            return el;
         }
-
-        //check trường hợp do not call vs đầu số 84
-        let phoneSub = el['field_so_dien_thoai'].substr(0, 2);
-        let phoneFormat;
-
-        //trường hợp này đầu vào excel format là 84
-        if (phoneSub == "84") {
-            // định dạng gửi qua bắt buộc đầu số là 84
-            phoneFormat = el['field_so_dien_thoai'].replace(el['field_so_dien_thoai'].charAt(0), "")
-            phoneFormat = phoneFormat.replace(phoneFormat.charAt(0), "0")
-        }
-
-        if (listDoNotCall.indexOf(phoneFormat) >= 0) {
-            el.statusCheck = false
-            el.statusMessage = "Do Not Call";
-            el.cellFail.push("A" + (2 + index))
-        }
-
-        //trường hợp này vs đầu vào excel format thiếu số 0
-        if (listDoNotCall.indexOf("0" + el['field_so_dien_thoai']) >= 0) {
-            el.statusCheck = false
-            el.statusMessage = "Do Not Call";
-            el.cellFail.push("A" + (2 + index))
-        }
-        return el;
     })
     return arr;
 }
