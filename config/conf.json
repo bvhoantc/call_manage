@@ -3,7 +3,7 @@
 		"_id": "632a86ebacdc0a575ba383b3",
 		"ip": "localhost",
 		"port": 6129,
-		"name": "ICare",
+		"name": "ICall",
 		"exec_mode": "fork",
 		"instances": 1,
 		"codeCompany": "6129"
