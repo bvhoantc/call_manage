@@ -1,6 +1,6 @@
 {
 	"app": {
-		"_id": "632a86ebacdc0a575ba383b3",
+		"_id": "60cab8641d4d596e36bce3af",
 		"ip": "localhost",
 		"port": 6129,
 		"name": "ICall",
@@ -12,15 +12,15 @@
 		"name": "icall",
 		"ip": "18.163.40.205",
 		"port": 27017,
-		"user": "bvhoantc",
-		"pwd": "1520@123#"
+		"user": "bvhoan",
+		"pwd": "123456"
 	},
 	"database-core": {
 		"ip": "18.163.40.205",
 		"port": 27017,
 		"name": "icall",
-		"user": "bvhoantc",
-		"pwd": "1520@123#",
+		"user": "bvhoan",
+		"pwd": "123456",
 		"mechanism": "",
 		"digestPassword": false
 	},
