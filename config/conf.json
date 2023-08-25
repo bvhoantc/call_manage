@@ -10,13 +10,13 @@
 	},
 	"database": {
 		"name": "icall",
-		"ip": "16.162.160.51",
+		"ip": "18.162.46.249",
 		"port": 27017,
 		"user": "bvhoan",
 		"pwd": "123456"
 	},
 	"database-core": {
-		"ip": "16.162.160.51",
+		"ip": "18.162.46.249",
 		"port": 27017,
 		"name": "icall",
 		"user": "bvhoan",
@@ -36,7 +36,7 @@
 		"email": 6012
 	},
 	"activemq": {
-		"ip": "43.198.105.60",
+		"ip": "18.162.232.113",
 		"port": "61613",
 		"user": "admin",
 		"pwd": "admin",
