@@ -30393,7 +30393,7 @@ table.table tr:not(.filter) td:not(:last-child):not(.inlineEditButton) li {
     padding: 10px 0px;
 }
 
-/* 2020/09/21 customize bootstrap 3 -> 4 by hainv */
+/* 2023/09/21 customize bootstrap 3 -> 4 by hainv */
 .d-none{
     display: none !important;
 }

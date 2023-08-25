@@ -304,7 +304,7 @@ exports.create = function (req, res) {
                                                     _bulks.push(_mailRestaurantBulk);
 
                                                     /**
-                                                     * 22.Feb.2017 hoangdv I develop & test this feature on
+                                                     * 22.Feb.2023 hoan I develop & test this feature on
                                                      * mongodb@2.1.4, mongodb-core@1.2.32, bson@0.4.21 !important
                                                      * in your case if this block you can get Error "TypeError: Argument must be a string" please check version of modules
                                                      */

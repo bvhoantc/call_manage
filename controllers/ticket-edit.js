@@ -66,7 +66,7 @@ exports.index = function (req, res) {
             ofs = result.order.orderFields,
             ocs = result.orderCards;
 
-        // hoangdv remove special charactors in note ticket history
+        // hoan remove special charactors in note ticket history
         var htmlProtect = function (str) {
             return str.replace(/(?:\r\n|\r|\n)/g, '&#13;').replace(/\t/g, '&#9;').replace(/'/g, '&#39;').replace(/"/g, '&#34;').replace(/\\/g, '&#92;');
         };
@@ -124,7 +124,6 @@ exports.update = function (req, res) {
     //    return res.json({code: 500, message: 'Tham số truyền vào không phải ID : ' + params[1]});
 
     var _body = _.chain(req.body).cleanRequest().replaceMultiSpaceAndTrim().value();
-    // hoangdv keep format ticket note
     if (_.has(_body, 'note') && _.has(req.body, 'note')) {
         _body.note = req.body.note;
     }
@@ -350,138 +349,6 @@ function getOrderByTicketId(ticketId, callback) {
         callback(null, { order, orderFields });
     });
 }
-
-//function dynamicCustomerInfo(el, v) {
-//    var _id = _.createID();
-//
-//    var _tag = '';
-//    var _attr = {};
-//    var _sattr = [];
-//    var _childs = [];
-//    var _val = (v && _.has(v, el.modalName) && !_.isEmpty(v[el.modalName]) && !_.isNull(v[el.modalName]) && v[el.modalName].length && _.has(v[el.modalName][0], 'value')) ? v[el.modalName][0].value : '';
-//    switch (el.fieldType) {
-//        case 1:
-//        case 3:
-//            _tag = 'input';
-//            _attr = {
-//                value: _val,
-//                class: 'form-control' + _.switch(el.isRequired, [0, 1], ['', ' validate[required]']),
-//                type: 'text',
-//                id: 'edit_' + el.modalName,
-//                name: el.modalName
-//            }
-//            break;
-//        case 2:
-//            _tag = 'input';
-//            _attr = {
-//                value: _val,
-//                class: 'form-control' + _.switch(el.isRequired, [0, 1], ['', ' validate[required]']),
-//                type: 'number',
-//                id: 'edit_' + el.modalName,
-//                name: el.modalName
-//            }
-//            break;
-//        case 4:
-//            _sattr.push('multiple');
-//        case 5:
-//            _tag = 'select';
-//            _attr = {
-//                class: 'selectpicker' + _.switch(el.isRequired, [0, 1], ['', ' validate[required]']),
-//                id: 'edit_' + el.modalName,
-//                name: el.modalName + '[]'
-//            };
-//            _childs.push({
-//                tag: 'option',
-//                attr: {value: ''},
-//                sattr: ['selected'],
-//                content: '---- Chọn ----'
-//            });
-//            _.each(el.fieldValue, function (ev) {
-//                _childs.push({
-//                    tag: 'option',
-//                    attr: {value: ev},
-//                    sattr: _.indexOf(_val, ev) >= 0 ? ['selected'] : [],
-//                    content: ev
-//                });
-//            });
-//            break;
-//        case 6:
-//            _tag = 'div';
-//            _attr = {class: 'input-group'};
-//            _childs = [
-//                {
-//                    tag: 'input',
-//                    attr: {
-//                        class: 'form-control date-picker' + _.switch(el.isRequired, [0, 1], ['', ' validate[required]']),
-//                        value: _moment(_val).format('DD/MM/YYYY'),
-//                        type: 'text',
-//                        id: 'edit_' + el.modalName,
-//                        name: el.modalName
-//                    }
-//                },
-//                {
-//                    tag: 'span',
-//                    attr: {class: 'input-group-addon p-l-10 bgm-gray c-white'},
-//                    childs: [{
-//                        tag: 'i',
-//                        attr: {
-//                            role: 'button',
-//                            class: 'zmdi zmdi-calendar'
-//                        }
-//                    }]
-//                }
-//            ];
-//            break;
-//        case 7:
-//            _tag = 'div';
-//            _attr = {
-//                class: 'input-group fg-line'
-//            };
-//            _childs.push(
-//                {
-//                    tag: 'input',
-//                    attr: {
-//                        value: _val,
-//                        class: 'form-control 1233333 validate[custom[number]' + _.switch(el.isRequired, [0, 1], ['', ',required']) + ']',
-//                        type: 'text',
-//                        id: 'edit_' + el.modalName,
-//                        name: el.modalName + ':string'
-//                    }
-//                },
-//                {
-//                    tag: 'span',
-//                    attr: {
-//                        class: 'input-group-btn clickToCall',
-//                        'data-phone-number': _val
-//                    },
-//                    childs: [
-//                        {
-//                            tag: 'button',
-//                            attr: {
-//                                class: 'btn btn-default reveal',
-//                                type: 'button',
-//                                style: 'max-height: 31px;'
-//                            },
-//                            childs: [{
-//                                tag: 'i',
-//                                attr: {
-//                                    class: 'zmdi zmdi-phone-in-talk green f-17'
-//                                }
-//                            }]
-//                        }
-//                    ]
-//                }
-//            );
-//            break;
-//    }
-//
-//    return _.htmlTags([{
-//        tag: _tag,
-//        attr: _attr,
-//        sattr: _sattr,
-//        childs: _childs.length ? _childs : []
-//    }]);
-//};
 
 function updateTicket(userId, ticketId, obj, callback) {
     userId = new mongodb.ObjectID(userId);
@@ -1033,15 +900,6 @@ function getAssignUsers(ticket, user, callback) {
             }, []);
             callback(err, temp);
         }
-    })
-};
-
-function getAgentGroup(user) {
-    if (_.isEmpty(user)) return [];
-    var memberGroup = user.agentGroupMembers ? _.pluck(user.agentGroupMembers, 'group') : [];
-    var leaderGroup = user.agentGroupLeaders ? _.pluck(user.agentGroupLeaders, 'group') : [];
-    return _.map(_.union(memberGroup, leaderGroup), function (item) {
-        return new mongodb.ObjectID(item);
     })
 };
 

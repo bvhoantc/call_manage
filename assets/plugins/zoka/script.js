@@ -299,7 +299,7 @@
                             'data-date-format': 'HH:mm DD/MM/YYYY',
                             id: 'deadline',
                             name: 'deadline',
-                            placeholder: 'VD: 15:23 19/01/2016',
+                            placeholder: 'VD: 15:23 19/01/2023',
                             value: moment(deadLineValue).format('HH:mm DD/MM/YYYY')
                         }
                     }]

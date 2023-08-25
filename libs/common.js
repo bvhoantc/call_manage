@@ -524,7 +524,7 @@ module.exports = {
                         && !_.isEqual(menu.link, '/')
                         && !_.isEqual(menu.link, '/none')
                         && menu.link.split('/')[1] == url) {
-                        //Lamlv edit 16/08/2016
+                        //Lamlv edit 16/08/2023
                         memo.push({ tag: 'li', childs: [{ tag: 'span', attr: {}, content: menu.name }] });
 
                         if (_.isEqual(_.last(module), 'new')) memo.push({ tag: 'li', content: 'Tạo mới' });
@@ -1252,7 +1252,7 @@ module.exports = {
                 _attr = {
                     class: 'input-group fg-line'
                 };
-                // 19.Mar.2017 hoangdv click to creat new ticket
+                // 19.Mar.2023 hoan click to creat new ticket
                 var clickToCreateTicket = {
                     tag: 'span'
                 };

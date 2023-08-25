@@ -186,7 +186,7 @@ var DFT = function ($) {
                 if (currentTicket.idService) {
                     serviceId = currentTicket.idService._id;
                 }
-                // 21.Mar.2017 hoangdv Thực hiện gọi ra trên ticket gọi vào, hỏi có tạo ticket hay không?
+                // 21.Mar.2023 hoan Thực hiện gọi ra trên ticket gọi vào, hỏi có tạo ticket hay không?
                 if (currentTicket && currentTicket.idService && !currentTicket.idCampain) {
                     // là ticket gọi vào - confirm tạo ticket
                     swal({
@@ -275,7 +275,7 @@ var DFT = function ($) {
         });
 
         /**
-         * 22.Mar.2017 hoangdv Mở cửa newtab thực hiện tạo ticket dựa trên số điện thoại
+         * 22.Mar.2023 hoan Mở cửa newtab thực hiện tạo ticket dựa trên số điện thoại
          * Nếu không có số điện thoại -> mở tab mới với thông tin số điện thoại trống
          * @param phoneNumber Số điện thoại
          */
@@ -429,8 +429,6 @@ var DFT = function ($) {
 
     };
     function createPaging(paging, classPaging) {
-        console.log(paging);
-
         if (!paging) return '';
         var firstPage = paging.first ? '<li><a class="' + classPaging + '" data-link="' + paging.first + '">&laquo;</a></li>' : '';
         var prePage = paging.previous ? '<li><a class="' + classPaging + '" data-link="' + paging.previous + '">&lsaquo;</a></li>' : '';
@@ -511,11 +509,8 @@ var DFT = function ($) {
             autoPositionUpdate: true,
             validationEventTrigger: 'keyup',
             onValidationComplete: function (form, status) {
-                let facebook = $("#edit_field_facebook").val();
-                let zalo = $("#edit_field_zalo").val();
-                let query = `?field_facebook=${facebook}&field_zalo=${zalo}`
                 if (status) {
-                    _AjaxData('/ticket-edit/customer-' + $('#save-customer').attr('data-id')+ query, 'PUT', $(form).getData(), function (resp) {
+                    _AjaxData('/ticket-edit/customer-' + $('#save-customer').attr('data-id'), 'PUT', $(form).getData(), function (resp) {
                         if (resp.code == 200) {
                             swal({
                                 title: 'Cập nhật thành công',
@@ -810,7 +805,6 @@ var DFT = function ($) {
     //Load iframe chỉnh sửa phiếu khiếu nại
     $('#editComlaintPopup').on('shown.bs.modal', function (e) {
         var idTicket = $(this).attr('data-id')
-        console.log('idticket', idTicket);
 
         $(this).find('iframe').attr('src', '/#complaint/' + idTicket + '/edit');
     });
@@ -923,7 +917,6 @@ var DFT = function ($) {
         });
         // Click tìm kiếm
         $('#searchAdvisoryTicket').click(function () {
-            console.log(1111111111);
             getFilterAdvisoryTicket(true);
         });
         // Làm mới trang
@@ -939,7 +932,6 @@ var DFT = function ($) {
                 if (!_.isEqual($(el).val(), '') && !_.isEqual($(el).val(), null)) memo[el.name] = $(el).val();
                 return memo;
             }, {}).value();
-        console.log('filter', filter);
 
         if (page) filter['page'] = page;
         filter['idCustomer'] = currentTicket.idCustomer;
@@ -948,7 +940,6 @@ var DFT = function ($) {
                 if (resp.code == 200) {
                     $('#body-table').empty();
                     if (resp.data.length) {
-                        console.log(resp.data.length);
                         let total = document.querySelector('.totalAdvisory');
                         if (total) {
                             total.remove();
@@ -975,7 +966,6 @@ var DFT = function ($) {
                 if (resp.code == 200) {
                     $('#body-table').empty();
                     if (resp.data.length) {
-                        console.log(resp.data.length);
                         let total = document.querySelector('.totalAdvisory');
                         if (total) {
                             total.remove();
@@ -994,7 +984,6 @@ var DFT = function ($) {
 
     // Hiển thị dữ liệu lên giao diện
     var loadDataAdvisory = function (resp) {
-        console.log(1111, resp);
 
         var template = '<tr>' +
             '<td>{0}</td>' +
@@ -1008,7 +997,6 @@ var DFT = function ($) {
 
         var rows = '';
         resp.data.forEach(function (el) {
-            console.log(el)
             if (_.isEmpty(el)) return;
 
             rows += template.str(
@@ -1032,8 +1020,6 @@ var DFT = function ($) {
     })
     // //Load iframe tạo mới phiếu tư vấn
     $('#editAdvisoryPopup').on('shown.bs.modal', function (e) {
-        console.log(123123123123, $(this).attr('data-id'));
-
         // var idCompany = currentTicket.idService.idCompany._id
         var idTicket = $(this).attr('data-id')
         $(this).find('iframe').attr('src', '/#ticket-advisory/' + idTicket + '/edit?checkVoice=true');
@@ -1128,7 +1114,6 @@ var DFT = function ($) {
             survey = JSON.parse(survey);
             surveyResult = JSON.parse(surveyResult);
             createCallInfo();
-            console.log('script js sjsjsjsjsj 2', new Date())
             bindClick();
             bindSubmit();
             bindValue();
