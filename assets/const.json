@@ -62,7 +62,7 @@
             "TXT_DISPLAY_NAME_DESC": "Tên hiển thị của người dùng. Tối thiểu 3 kí tự, tối đa 60 kí tự",
             "ALERT_SPACE_NOT_ALLOW": "Không được phép nhập khoảng trắng ở đây",
             "TXT_ACCOUNT_CODE": "Account Code",
-            "TXT_ACCOUNT_CODE_DESC": "Đây là chú thích cho account code",
+            "TXT_ACCOUNT_CODE_DESC": "ID Cisco Jabber",
             "SEARCH_NOT_FOUND_TITLE": "Không tìm thấy dữ liệu",
             "SEARCH_NOT_FOUND_TEXT": "Không tìm thấy kết quả với khoá tìm kiếm",
             "TXT_ROLE": "Chức vụ"

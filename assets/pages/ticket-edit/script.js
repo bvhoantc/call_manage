@@ -236,29 +236,7 @@ var DFT = function ($) {
                             }
                         });
                     }, function done(err) {
-                        
-                        // Khi có cuộc call kết nối thực hiện call api tạo ticket
-                        let data = {
-                            id: dialog && dialog.id,
-                            ticketId: currentTicket && currentTicket._id
-                        }
-                        jQuery.post('/api/v1/voice/update-ticket', data
-                            , function (resp) {
-                                if (resp && resp.code == 200) {
-                                    $.LoadingOverlay("hide");
-                                } else {
-                                    $.LoadingOverlay("hide");
-                                    return swal({
-                                        title: "Thông báo",
-                                        text: "Tạo thông tin khách hàng và ticket thất bại!",
-                                        type: "warning",
-                                        confirmButtonColor: "#DD6B55",
-                                        confirmButtonText: "OK",
-                                        closeOnConfirm: true,
-                                    });
-                                }
-                                
-                            });
+                        $.LoadingOverlay("hide");
                     })
                 }
             }, _makeCallHandler);

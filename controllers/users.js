@@ -1,4 +1,3 @@
-var requestUser = require(path.join(_rootPath, 'queue', 'common', 'request-users.js'));
 var syncAcd = require(path.join(_rootPath, 'monitor', 'sync-acd.js'));
 var manager = require(path.join(_rootPath, 'monitor', 'manager.js'));
 
@@ -61,57 +60,59 @@ exports.index = {
 
 // POST
 exports.create = function(req, res) {
-    if (_.has(req.query, 'type')) {
-        _Users.find({}, function(error, data) {
-            return res.json({ code: error ? 500 : 200, users: error ? error : data })
-        });
-    } else {
-        if (!_.has(req.body, 'uId')) return res.json({ code: 500, message: 'UserID không hợp lệ' });
-        var uid = req.body.uId;
-        if (!mongodb.ObjectID.isValid(uid)) uid = uid.split(',');
-
-        requestUser.RequestAddUser(uid,
-            function() {
-                res.locals._url = req.originalUrl;
-                var err = new Error('Request Timeout !');
-                res.render('500', { message: err.message });
-            },
-            function(obj) {
-                var err = obj['error'];
-                var result = obj['result'];
-                res.json({ code: err ? 500 : 200, message: err ? err.message : result });
-            });
+    req.body = _.chain(req.body).cleanRequest().replaceMultiSpaceAndTrim().value();
+    if (_.has(req.body, 'idAgentCisco') && req.body.idAgentCisco != '') {
+        _Users.find({idAgentCisco: req.body.idAgentCisco}, function(err, user){
+            if(err) res.json({code: 500, message: err.message || err})
+            console.log('ussss', user);
+        })
     }
+
+    res.json({
+        code: 200,
+    })
 
 };
 
 exports.new = function(req, res) {
-    var page = _.has(req.query, 'page') ? parseInt(req.query.page) : 1;
-    var rows = _.has(req.query, 'rows') ? parseInt(req.query.rows) : 10;
-
-    requestUser.RequestUser(page, rows, req.query,
-        function() {
-            res.locals._url = req.originalUrl;
-            var err = new Error('Request Timeout !');
-            res.render('500', { message: err.message });
-        },
-        function(result) {
-            var paging = null;
-            if (!!result && !!result.count) {
-                paging = new pagination.SearchPaginator({
-                    prelink: '/users/new',
-                    current: page,
-                    rowsPerPage: rows,
-                    totalResult: result.count
-                }).getPaginationData();
+    try {
+        _async.parallel({
+            role: function(callback) {
+                _Role.aggregate([
+                    { $match: { status: 1 } },
+                    { $sort: { weight: 1 } },
+                    {
+                        $group: {
+                            _id: '$roleGroup',
+                            name: { $first: '$name' },
+                            role: { $push: { roleId: '$_id', name: '$name' } }
+                        }
+                    }
+                ], callback)
+            },
+            company: function(callback) {
+                _Company.aggregate([
+                    { $match: { status: 1 } },
+                    { $lookup: { from: 'agentgroups', localField: '_id', foreignField: 'idParent', as: 'ag' } },
+                    { $unwind: { path: "$ag", preserveNullAndEmptyArrays: true } },
+                    { $group: { _id: '$_id', name: { $first: '$name' }, ag: { $push: { _id: '$ag._id', name: '$ag.name' } } } }
+                ], callback);
             }
-
+        }, function(err, result){
             _.render(req, res, 'users-new', {
-                title: 'Thêm mới người dùng vào dự án',
-                myUser: result.users,
-                paging: paging,
-            }, true, result.error);
-        });
+                title: 'Thêm mới người dùng',
+                role: result.role,
+                myCompany: result.company,
+                plugins: [['bootstrap-duallistbox'], ['bootstrap-select'], ['chosen']]
+            }, !_.isNull(result), err);
+        })
+    } catch (error) {
+        res.json({
+            code: 500,
+            message: error.message || error
+        })
+    }
+    
 };
 // GET : http://domain.com/users/:_id/edit
 exports.edit = function(req, res) {
