@@ -10,13 +10,13 @@
 	},
 	"database": {
 		"name": "icall",
-		"ip": "18.162.46.249",
+		"ip": "18.162.150.80",
 		"port": 27017,
 		"user": "bvhoan",
 		"pwd": "123456"
 	},
 	"database-core": {
-		"ip": "18.162.46.249",
+		"ip": "18.162.150.80",
 		"port": 27017,
 		"name": "icall",
 		"user": "bvhoan",
@@ -36,10 +36,16 @@
 		"email": 6012
 	},
 	"activemq": {
-		"ip": "18.162.232.113",
+		"ip": "18.162.96.231",
 		"port": "61613",
 		"user": "admin",
 		"pwd": "admin",
 		"queueName": "icall"
+	},
+	"cisco": {
+		"apiCisco": {
+			"ip": "http://172.16.86.186:4242",
+			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhcGkiLCJwd2QiOiJBUEllckAxMjMifQ.zbcraPNh7IvmAFX0D2dBjVfRB_vRzkAJA6P3BU3dh2E",
+		}
 	}
 }
