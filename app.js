@@ -11,7 +11,7 @@ const { initDBCallBack } = require('./db/connections');
 const nameFolder = {
     log: 'log',
 }
-
+const voiceRouter = require("./api/routers/voiceRouter");
 require('colors');
 global._socketUsers = {};
 global.path = require('path');
@@ -161,6 +161,7 @@ app.use(require('multer')({ dest: path.join(__dirname, 'temp') }).any());
 app.use(require('serve-favicon')(path.join(__dirname, 'assets', 'favicon.ico')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(require(path.join(_rootPath, 'libs', 'auth')).auth);
+app.use("/api/v1/voice", voiceRouter);
 
 require(path.join(_rootPath, 'libs', 'cleanup.js')).Cleanup();
 switch (process.env.NODE_ENV) {
