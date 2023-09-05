@@ -45,7 +45,7 @@
 	"cisco": {
 		"apiCisco": {
 			"ip": "http://172.16.86.186:4242",
-			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhcGkiLCJwd2QiOiJBUEllckAxMjMifQ.zbcraPNh7IvmAFX0D2dBjVfRB_vRzkAJA6P3BU3dh2E",
+			"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhcGkiLCJwd2QiOiJBUEllckAxMjMifQ.zbcraPNh7IvmAFX0D2dBjVfRB_vRzkAJA6P3BU3dh2E"
 		}
 	}
 }
