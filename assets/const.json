@@ -818,7 +818,7 @@
             "TXT_TOTAL_WORKING_TIME": "Tổng thời gian làm việc ĐTV"
         },
         "REPORT_LOGIN_LOGOUT": {
-            "TXT_NAME": "ĐTV",
+            "TXT_NAME": "User",
             "TXT_FIRST_LOGIN_TIME": "Login lần đầu",
             "TXT_LAST_LOGOUT_TIME": "Logout lần cuối",
             "TXT_TOTAL_ONLINE_DUR": "Thời gian online",
