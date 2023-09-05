@@ -13,8 +13,8 @@ var Finesse = function (username, password) {
     var
         _resource,
         _credentials = jabberwerx.util.crypto.b64Encode(username + ":" + password),
-        _webappPath = window._urlBinding + "/finesse",
-        _outboundCampaignAPI = window._urlBinding,
+        _webappPath = "https://test-chat-mail.telehub.vn/finesse",
+        _outboundCampaignAPI = "https://test-chat-mail.telehub.vn",
         _createSetHeader = function (headers) {
             return function (xhr) {
                 var header;
@@ -27,6 +27,7 @@ var Finesse = function (username, password) {
                 }
             };
         }
+        console.log('_webappPath', _webappPath, _outboundCampaignAPI);
     _createSuccessHandler = function (handler) {
         return function (data, statusText, xhr) {
             if (handler) {
