@@ -118,7 +118,7 @@
                         <select class="selectpicker" id="idSkillGroup" name="idSkillGroup">
                             <option value='<%- cur.idSkillGroup%>' selected ><%- cur.nameSkillGroup%></option>
                             <% skillsGroup.forEach(function(el, i) {%>
-                            <option value="<%- el.refURL[0]%>"  <%- (cur.idSkillGroup && _equal(el.refURL[0],cur.idSkillGroup) ? 'selected' : ''); %>><%- el.name[0]%></option>
+                            <option value="<%- el._id%>"  <%- (cur.idSkillGroup && _equal(el._id,cur.idSkillGroup) ? 'selected' : ''); %>><%- el.name%></option>
                             <%})%>
                         </select>
                     </div>

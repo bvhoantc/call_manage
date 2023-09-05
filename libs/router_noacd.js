@@ -41,19 +41,17 @@ module.exports = function routers(app) {
     app.locals._dInputFilter2 = _.dynamicInputFilter2;
     app.locals._dInputField = _.dynamicInputField;
     app.locals._fieldValue = function (obj, name, type) {
+        console.log('obj[name][0].value', obj, name,value);
         if (!_.has(obj, name)) return '';
         if (!obj[name].length) return '';
         switch (Number(type)) {
             case 4:
             case 5:
                 return _.without(obj[name][0].value, '0', '', null).join(', ');
-                break;
             case 6:
                 return _moment(obj[name][0].value).format('DD/MM/YYYY');
-                break;
             default:
                 return obj[name][0].value;
-                break;
         }
     };
 

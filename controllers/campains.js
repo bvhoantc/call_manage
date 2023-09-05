@@ -150,10 +150,6 @@ exports.index = {
                             _TicketReasonCategory.populate(result, { path: 'idCategoryReason', select: 'name' }, next2);
                         },
                         function (result, next2) {
-                            // Lấy dữ liệu trunk
-                            _Trunk.populate(result, { path: 'trunk', select: 'name prefix' }, next2);
-                        },
-                        function (result, next2) {
                             // Lấy dữ liệu số khách hàng thuộc chiến dịch
                             _CampainCustomer.aggregate([
                                 { $match: { idCampain: { $in: _.pluck(result, '_id') } } },
@@ -226,10 +222,6 @@ exports.index = {
                     // Lấy dữ liệu filter theo nhóm tình trạng ticket
                     _TicketReasonCategory.find({ status: 1, category: { $in: [0, 2] } }, next);
                 },
-                trunks: function (next) {
-                    // Lấy dữ liệu trunk
-                    _Trunk.find({ status: 1 }, next);
-                },
                 agents: function (next) {
                     // Lấy dữ liệu agent
                     _Users.find({ status: 1 }, next);
@@ -255,7 +247,6 @@ exports.index = {
                     campains: result.campainFind,
                     surveys: result.surveyFind,
                     reasons: result.reasonFind,
-                    trunks: result.trunks,
                     agents: result.agents
                 }, true);
             });
@@ -365,13 +356,6 @@ exports.create = function(req, res) {
                 }
             },
         ], function(err, result) {
-            if (!err && req.body.type != 1) {
-                // Cập nhật dữ liệu mới tới module quản lý campaign
-                _Trunk.findOne({ _id: req.body.trunk }, function(err, trunk) {
-                    _campaign.trunk = trunk;
-                    camManager.addCampaign(_campaign);
-                });
-            };
             _.genTree();
             res.json({ code: (err ? 500 : 200), message: err ? err : 'Tạo chiến dịch thành công' });
 

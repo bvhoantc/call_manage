@@ -994,7 +994,6 @@
                 if (data.companyOutbound && data.companyOutbound.length > 0) {
                     nameCompany = data.companyOutbound;
                 }
-                console.log('ten cong yt', nameCompany)
                 html += createRow(nameCompany);
                 html += createRow(data.channelType);
                 //trungdt jira 919
@@ -1041,19 +1040,14 @@
                 html += '<tr>';
                 let nameCompany = ""
                 if (data.companyChat && data.companyChat.length > 0) {
-                    console.log('ten cong yt222')
                     nameCompany = data.companyChat;
                 }
                 if (data.companyInbound && data.companyInbound.length > 0) {
                     nameCompany = data.companyInbound;
                 }
-                if (data.companyMail && data.companyMail.length > 0) {
-                    nameCompany = data.companyMail;
-                }
                 if (data.companyOutbound && data.companyOutbound.length > 0) {
                     nameCompany = data.companyOutbound;
                 }
-                console.log('ten cong yt', nameCompany)
                 html += createRow(nameCompany);
                 html += createRow(data.channelType);
                 //trungdt jira 919

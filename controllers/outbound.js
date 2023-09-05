@@ -30,10 +30,6 @@ exports.index = {
                             populate: [{
                                 path: 'idCompany',
                                 model: _Company
-                            }, {
-                                path: 'trunk',
-                                model: _Trunk,
-                                select: 'prefix'
                             }]
                         })
                         .exec(function (error, t) {

@@ -36,8 +36,6 @@ try {
 }
 
 const {
-    SYNC_CHAT,
-    SYNC_MAIL,
     SYNC_RECORDING,
 } = process.env
 
@@ -270,8 +268,6 @@ global.sio = require('socket.io').listen(server, { log: false });
 sio.on('connection', function (socket) {
     require(path.join(_rootPath, 'socket', 'io.js'))(socket);
 });
-
-global._MailService = require(path.join(_rootPath, 'libs', 'mailService'));//Gửi SMS/Email
 
 
 require(path.join(_rootPath, 'monitor', 'order-monitor.js')).assignByInterval();

@@ -760,42 +760,6 @@ module.exports = {
                     select: 'skillName alarmDurHigh alarmDurLow recordingState status'
                 }, next);
             },
-            function (result, next) {
-                _GroupsProfileChat.populate(result, {
-                    path: 'groupAgent.idProfileChat',
-                    select: 'name status skills'
-                }, next);
-            },
-            function (result, next) {
-                _SkillsChat.populate(result,
-                    [{
-                        path: 'groupAgent.idProfileChat.skills.idSkill',
-                        select: 'skillName status'
-                    },
-                    {
-                        path: 'channels.servicechats.idSkill',
-                        select: 'skillName status'
-                    }]
-                    , next);
-            },
-            function (result, next) {
-                _GroupsProfileMail.populate(result, {
-                    path: 'groupAgent.idProfileMail',
-                    select: 'name status skills'
-                }, next);
-            },
-            function (result, next) {
-                _SkillsMail.populate(result,
-                    [{
-                        path: 'groupAgent.idProfileMail.skills.idSkill',
-                        select: 'skillName status'
-                    },
-                    {
-                        path: 'channels.servicemails.idSkill',
-                        select: 'skillName status'
-                    }]
-                    , next);
-            }
         ], function (err, result) {
             var tree = {};
             tree.ternal = _config.app._id;

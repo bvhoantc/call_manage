@@ -96,7 +96,6 @@ exports.index = function (req, res) {
                 problemCategory: result.problemCategory,
                 brands: result.brands,
                 provinces: result.provinces,
-                restaurants: result.restaurants,
                 isEditComplaint: result.isEdit,
                 order: o,
                 orderFields: ofs,
@@ -208,10 +207,6 @@ function getFullTicketById(ticketId, callback) {
                         options: { sort: { weight: 1, displayName: 1 } }
                     }
                 }
-            }, {
-                path: 'trunk',
-                model: _Trunk,
-                select: 'prefix'
             }]
         })
         .populate({ path: 'updateBy', model: _Users, select: 'name displayName' })
@@ -1371,9 +1366,6 @@ function collectionTicketInfo(req, t, getCustomerInfo) {
         provinces: function (cb) {
             _Provinces.find({}).sort({ name: 1 }).exec(cb)
         },
-        restaurants: function (cb) {
-            _Restaurants.find({}).sort({ name: 1 }).exec(cb)
-        },
         complaintCategory: function (cb) {
             _ComplaintCategory.find({ status: 1 }, cb)
         },
@@ -1392,14 +1384,6 @@ function collectionTicketInfo(req, t, getCustomerInfo) {
             }
             else {
                 cb(null, false)
-                // _UserRestaurant.find({ idAgent: req.session.user._id }, function (err, result) {
-                //     if (result.length > 0) {
-                //         cb(null, false)
-                //     }
-                //     else {
-                //         cb(null, true)
-                //     }
-                // })
             }
 
         }

@@ -451,7 +451,7 @@ var DFT = function ($) {
                 (el.customerName ? el.customerName : ''),
                 (el.customerPhone ? el.customerPhone : ''),
                 (el.agent ? el.agent : ''),
-                (el.restaurant ? el.restaurant : ''),
+                // (el.restaurant ? el.restaurant : ''),
                 (el.status == 0 ? 'Đang xử lý' : (el.status == 1 ? 'Tạm dừng xử lý' : 'Đã xử lý')),
                 (moment(el.created).format('DD/MM/YYYY HH:mm A')),
                 (moment(el.deadline).format('DD/MM/YYYY HH:mm A')),
@@ -883,82 +883,6 @@ var DFT = function ($) {
         });
     };
 
-    var bindClickAdvisory = function () {
-        // Chuyển trang
-        $(document).on('click', '#pagingAdvisory .pagination li a', function (e) {
-            e.preventDefault();
-            let url = e.target.getAttribute('href')
-            let i = url.indexOf("?page=");
-            let page = i === -1 ? 1 : url.substring(i + 6);
-            _page = page;
-            getFilterAdvisoryTicket(false, page);
-        });
-        // Click tìm kiếm
-        $('#searchAdvisoryTicket').click(function () {
-            getFilterAdvisoryTicket(true);
-        });
-        // Làm mới trang
-        $(document).on('click', '.zmdi-refresh', function () {
-            _.LoadPage(window.location.hash);
-        });
-    };
-
-    // Lấy dữ liệu lọc và truy vấn server
-    var getFilterAdvisoryTicket = function (load, page) {
-        var filter = _.chain($('.input'))
-            .reduce(function (memo, el) {
-                if (!_.isEqual($(el).val(), '') && !_.isEqual($(el).val(), null)) memo[el.name] = $(el).val();
-                return memo;
-            }, {}).value();
-
-        if (page) filter['page'] = page;
-        filter['idCustomer'] = currentTicket.idCustomer;
-        if (load) {
-            _Ajax("/ticket-advisory?search=ticket&" + $.param(filter), 'GET', {}, function (resp) {
-                if (resp.code == 200) {
-                    $('#body-table').empty();
-                    if (resp.data.length) {
-                        let total = document.querySelector('.totalAdvisory');
-                        if (total) {
-                            total.remove();
-                        }
-                        $('#pagingAdvisory').empty();
-                        loadDataAdvisory(resp);
-                        $('#pagingAdvisory').append(_.paging('#ticket-advisory', resp.paging));
-                    } else {
-                        swal({
-                            title: "Thông báo",
-                            text: "Không tìm thấy các trường phù hợp",
-                            type: "warning",
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Xác nhận!",
-                            closeOnConfirm: true
-                        });
-                    }
-                } else {
-                    swal({ title: 'Cảnh báo!', text: resp.message });
-                }
-            })
-        } else {
-            _Ajax("/ticket-advisory?search=ticket&" + $.param(filter), 'GET', {}, function (resp) {
-                if (resp.code == 200) {
-                    $('#body-table').empty();
-                    if (resp.data.length) {
-                        let total = document.querySelector('.totalAdvisory');
-                        if (total) {
-                            total.remove();
-                        }
-                        $('#pagingAdvisory').empty();
-                        loadDataAdvisory(resp);
-                        $('#pagingAdvisory').append(_.paging('#ticket-advisory', resp.paging));
-                    }
-                } else {
-                    swal({ title: 'Cảnh báo!', text: resp.message });
-                }
-            })
-        }
-    };
-
 
     // Hiển thị dữ liệu lên giao diện
     var loadDataAdvisory = function (resp) {
@@ -1097,23 +1021,7 @@ var DFT = function ($) {
             bindValue();
             bindSocket(_socket);
             showTicket();
-
-            //ticketAvisory
-            bindValueAdvisory();
-            bindClickAdvisory();
-            getFilterAdvisoryTicket(false);
-            $('#btn-addTicketAdvisory').attr('style', 'display:none')
             $('#khachhang').attr('style', 'display:none')
-            //zoka.ticketReasonEvent($, '#frm-edit-ticket', '#ticketReasonCategory', '#ticketSubreason', '.tReason', {});
-            //$('.testthoima').html('<select class="select-picker form-control" id="123conma">' +
-            //    '<option>123123123</option>' +
-            //    '<option>123123123</option>' +
-            //    '<option>123123123</option>' +
-            //    '<option>123123123</option>' +
-            //    '<option>123123123</option>' +
-            //    '</select>');
-            //
-            //$('#123conma').selectpicker()
             $('.multi-date-picker').datepicker({
                 multidate: 2,
                 multidateSeparator: ' - ',
