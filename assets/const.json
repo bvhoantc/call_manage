@@ -824,7 +824,7 @@
             "TXT_TOTAL_ONLINE_DUR": "Thời gian online",
             "TXT_STATUS_DUR": "Thời gian trạng thái",
             "TXT_CHANGE_STATUS_TIME": "Lần chuyển trạng thái (avaiable => unavaiable)",
-            "TXT_AVG_ONLINE_DUR": "Trung bình thời gian online theo ngày",
+            "TXT_AVG_ONLINE_DUR": "Trung bình thời gian online",
             "TXT_TIME": "Thời gian",
             "TXT_DETAIL": "Chi tiết"
         },

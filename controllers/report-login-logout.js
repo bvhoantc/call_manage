@@ -5,8 +5,7 @@ exports.index = {
 				dateTime,
 				agents,
 				exportExcel,
-				exportExcelType,
-				type
+				type,
 			} = req.query;
 			let queryApi = {};
 
@@ -16,41 +15,15 @@ exports.index = {
 			let endTime = dateTime.split(' - ')[1] ? moment(dateTime.split(' - ')[1], 'DD-MM-YYYY').endOf('day').format('YYYY-MM-DD HH:mm:ss') : moment(dateTime.split(' - ')[0], 'DD-MM-YYYY').endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
 			if (!startTime || !endTime) throw new Error('Ngày bắt đầu và ngày kết thúc là bắt buộc!');
-      queryApi.startTime = {$gte: startTime}
-      queryApi.endTime = {$lte: endTime}
-      let agg = [
-        { $lookup: { from: 'agentstatuslogs', localField: '_id', foreignField: 'agentId', as: 'agentstatuslogs' } },
-        { $unwind: {path: '$agentstatuslogs', preserveNullAndEmptyArrays: true}},
-        { $project: {
-            _id: 1,
-            startTime: "$agentstatuslogs.startTime",
-            endTime: "$agentstatuslogs.endTime",
-            status: "$agentstatuslogs.status",
-            endReason: "$agentstatuslogs.endReason",
-            name: 1
-        }},
-        {$match: {endReason: "logout"}},
-      ]
-      agg.push({$match: queryApi});
-      agg.push(
-        { $group: {
-          _id: "$_id",
-          loginDateTime: {$first: "$startTime"},
-          userName: {$first: "$name"},
-          status: {$push: {
-              startTime: "$startTime",
-              endTime: "$endTime",
-              event: "$status",
-          }},
-        }}
-      )
-      console.log('agg', JSON.stringify(agg));
+      queryApi.startTime = {$gte: _moment(startTime).toDate()}
+      queryApi.endTime = {$lte: _moment(endTime).toDate()}
+      let agg = bindAgg(type, agents, queryApi)
       _Users.aggregate(agg, function(err, result){
-        if(err) throw new Error(err)
+        if(err) res.json({ code: 500,message: err.message || err })
         else{
-          console.log('result', result);
           res.json({
-            code: 200
+            code: 200,
+            data: result
           })
         }
       })
@@ -78,5 +51,71 @@ exports.index = {
     } catch (error) {
       return _.render(req, res, 'report-login-logout', null, true, error);
     }
+  }
+}
+
+function bindAgg (type, agents, queryApi) {
+  try {
+    let agg = []
+    if(agents) agg.push({$match: {_id: {$in: _.arrayObjectId(agents)} }})
+      agg.push(
+        { $lookup: { from: 'agentstatuslogs', localField: '_id', foreignField: 'agentId', as: 'agentstatuslogs' } },
+        { $unwind: {path: '$agentstatuslogs', preserveNullAndEmptyArrays: true}},
+        { $project: {
+            _id: 1,
+            startTime: "$agentstatuslogs.startTime",
+            endTime: "$agentstatuslogs.endTime",
+            status: "$agentstatuslogs.status",
+            endReason: "$agentstatuslogs.endReason",
+            displayName: 1
+        }},
+        {$match: {endReason: "logout"}},
+        {$match: queryApi},
+      )
+      if(type == 'by-day'){
+        agg.push(
+          { $project: {
+            _id: 1,
+            startTime: 1,
+            endTime: 1,
+            displayName: 1,
+            date: { $dateToString: { format: "%d-%m-%Y", date: "$startTime" } },
+            status: 1
+          }},
+          {$group: {
+            _id: {id: "$_id", date: "$date"},
+            totalDuration: {$sum: {$subtract: ["$endTime", "$startTime"]}},
+            avgDuration: {$avg: {$subtract: ["$endTime", "$startTime"]}},
+            status: {$push: {
+              startTime: "$startTime",
+              endTime: "$endTime",
+              event: "$status",
+            }},
+            displayName: {$first: "$displayName"},
+            LoginDateTime: {$first: "$startTime"},
+            LogoutDateTime: {$last: "$endTime"},
+          }}
+        )
+      }
+      else{
+        agg.push(
+          { $group: {
+            _id: "$_id",
+            displayName: {$first: "$displayName"},
+            LoginDateTime: {$first: "$startTime"},
+            LogoutDateTime: {$last: "$endTime"},
+            status: {$push: {
+              startTime: "$startTime",
+              endTime: "$endTime",
+              event: "$status",
+            }},
+            totalDuration: {$sum: {$subtract: ["$endTime", "$startTime"]}},
+            avgDuration: {$avg: {$subtract: ["$endTime", "$startTime"]}},
+          }}
+        )
+      }
+    return agg;
+  } catch (error) {
+    console.log('errr', error);
   }
 }
