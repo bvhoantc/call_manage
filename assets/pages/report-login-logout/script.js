@@ -47,9 +47,9 @@ var DFT = function ($) {
 				return;
 			}
 
-			// if (exportExcel) {
-			// 	return downloadFromUrl(resp.linkFile);
-			// }
+			if (exportExcel) {
+				return downloadFromUrl(resp.linkFile);
+			}
 		});
 	};
 
@@ -66,8 +66,8 @@ var DFT = function ($) {
 				</tr>
      		<tr>
 				<td class="text-center">${item.displayName}</td>
-				<td class="text-center">${moment.utc(item.LoginDateTime).format('HH:mm DD/MM/YYYY')}</td>
-				<td class="text-center">${moment.utc(item.LogoutDateTime).format('HH:mm DD/MM/YYYY')}</td>
+				<td class="text-center">${moment(item.LoginDateTime).format('HH:mm DD/MM/YYYY')}</td>
+				<td class="text-center">${moment(item.LogoutDateTime).format('HH:mm DD/MM/YYYY')}</td>
 				<td class="text-center">${hms(item.totalDuration)}</td>
 				<td class="text-center">${hms(item.avgDuration)}</td>
 			</tr>`;
@@ -81,8 +81,8 @@ var DFT = function ($) {
 			rowHtml += `
 				<tr>
 					<td class="text-center">${item.displayName}</td>
-					<td class="text-center">${moment.utc(item.LoginDateTime).format('HH:mm DD/MM/YYYY')}</td>
-					<td class="text-center">${moment.utc(item.LogoutDateTime).format('HH:mm DD/MM/YYYY')}</td>
+					<td class="text-center">${moment(item.LoginDateTime).format('HH:mm DD/MM/YYYY')}</td>
+					<td class="text-center">${moment(item.LogoutDateTime).format('HH:mm DD/MM/YYYY')}</td>
 					<td class="text-center">${hms(item.totalDuration)}</td>
 					<td class="text-center">${hms(item.avgDuration)}</td>
 				</tr>

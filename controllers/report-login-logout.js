@@ -1,3 +1,8 @@
+var zipFolder = require('zip-folder');
+
+const { createExcelFile } = require('../commons/handleExcel')
+let titleExcelTotal = 'Báo cáo login - logout tổng hợp';
+
 exports.index = {
 	json: async function (req, res) {
     try {
@@ -18,8 +23,13 @@ exports.index = {
       queryApi.startTime = {$gte: _moment(startTime).toDate()}
       queryApi.endTime = {$lte: _moment(endTime).toDate()}
       let agg = bindAgg(type, agents, queryApi)
-      _Users.aggregate(agg, function(err, result){
+      _Users.aggregate(agg, async function(err, result){
         if(err) res.json({ code: 500,message: err.message || err })
+        else if(exportExcel){
+          const createExcelResult = await exportExcelTotal(req, startTime, endTime, result)
+
+          return res.json({ code: 200, linkFile: createExcelResult });
+        }
         else{
           res.json({
             code: 200,
@@ -118,4 +128,129 @@ function bindAgg (type, agents, queryApi) {
   } catch (error) {
     console.log('errr', error);
   }
+}
+
+function exportExcelTotal(req, startDate, endDate, data) {
+	return new Promise(async (resolve, reject) => {
+		try {
+			let currentDate = new Date();
+			let folderName = req.session.user._id + "-" + currentDate.getTime();
+			let fileName = titleExcelTotal + ' ' + _moment(currentDate).format('DD-MM-YYYY');
+
+			let dataHeader = {
+				TXT_NAME: 'displayName',
+				TXT_FIRST_LOGIN_TIME: 'loginDateTime',
+				TXT_LAST_LOGOUT_TIME: 'logoutDateTime',
+				TXT_TOTAL_ONLINE_DUR: 'totalDuration',
+				TXT_AVG_ONLINE_DUR: 'avgDuration',
+			}
+
+			let newData = data.map((item) => {
+				return {
+					displayName: item.displayName,
+					loginDateTime: _moment(item.LoginDateTime).format('HH:mm DD/MM/YYYY'),
+					logoutDateTime: _moment(item.LogoutDateTime).format('HH:mm DD/MM/YYYY'),
+					totalDuration: hms(item.totalDuration),
+					avgDuration: hms(item.avgDuration),
+				}
+			});
+
+			await createExcel(
+				req,
+				startDate,
+				endDate,
+				titleExcelTotal,
+				dataHeader,
+				'REPORT_LOGIN_LOGOUT',
+				folderName,
+				null,
+				fileName,
+				newData,
+				null,
+				{
+					valueWidthColumn: [35, 20, 20, 20, 35],
+					companyName: 'Công Ty CP Viễn Thông Di Động ICall',
+					projectName: 'PHÒNG CHĂM SÓC KHÁCH HÀNG'
+				},
+			);
+
+
+			await fsx.mkdirs(path.join(_rootPath, 'assets', 'export', 'archiver'));
+
+			await fsx.mkdirs(path.join(_rootPath, 'assets', 'export', 'cdr'));
+
+			let folderPath = path.join(_rootPath, 'assets', 'export', 'cdr', folderName);
+			let folderZip = path.join(_rootPath, 'assets', 'export', 'archiver', folderName + '.zip');
+			await createFile(folderPath, folderZip);
+			const zipFolderResult = folderZip.replace(_rootPath, '');
+
+			return resolve(zipFolderResult);
+		} catch (error) {
+			return reject(error);
+		}
+	})
+}
+
+// Chuyển callback thành promise
+function createExcel(
+	req,
+	startTime,
+	endTime,
+	titleTable,
+	excelHeader,
+	configHeader,
+	folderName,
+	lastFolderName,
+	fileName,
+	data,
+	sumRows,
+	opts,
+) {
+	return new Promise((resolve, reject) => {
+		createExcelFile(
+			req,
+			startTime,
+			endTime,
+			titleTable,
+			excelHeader,
+			configHeader,
+			folderName,
+			lastFolderName,
+			fileName,
+			data,
+			sumRows,
+			opts,
+			function (error, result) {
+				if (error) {
+					return reject(error);
+				}
+				return resolve(result);
+			}
+		);
+	})
+}
+// Chuyển callback thành promise
+function createFile(folderPath, folderZip) {
+	return new Promise((resolve, reject) => {
+		zipFolder(folderPath, folderZip, function (error, result) {
+			if (error) {
+				return reject(error);
+			}
+			return resolve(result);
+		});
+	})
+}
+
+function hms(secs) {
+	if (isNaN(secs) || !secs || secs <= 0) return "0:00:00";
+	var sec = Math.floor(secs / 1000);
+	var minutes = Math.floor(sec / 60);
+	sec = sec % 60;
+	var hours = Math.floor(minutes / 60)
+	minutes = minutes % 60;
+	return hours + ":" + pad(minutes) + ":" + pad(sec);
+}
+
+function pad(num) {
+	return ("0" + num).slice(-2);
 }
