@@ -5,9 +5,6 @@ const axios = require('axios');
 var titlePage = 'Báo cáo quản lý ghi âm';
 var token;
 
-var {
-  getAgentDetailInfo,
-} = require(path.join(_rootPath, 'commons', 'functions'));
 var { columnToLetter } = require(path.join(
   _rootPath,
   "helpers",
@@ -104,13 +101,13 @@ exports.index = {
   },
   html: async function (req, res) {
     try {
-        loginRecording()
-        let agentInfos = await getAgentDetailInfo();
-        _.render(req, res, 'report-call-recording-v2', {
-            title: titlePage,
-            myUsers: agentInfos,
-            plugins: ['moment', ['bootstrap-select'], ['bootstrap-datetimepicker'], ['bootstrap-daterangepicker'], ['chosen']]
-        }, true, false);
+      loginRecording()
+      let agentInfos = await _Users.find({idAgentCisco: {$ne: null}})
+      _.render(req, res, 'report-call-recording-v2', {
+          title: titlePage,
+          myUsers: agentInfos,
+          plugins: ['moment', ['bootstrap-select'], ['bootstrap-datetimepicker'], ['bootstrap-daterangepicker'], ['chosen']]
+      }, true, false);
     } catch (err) {
       _.render(req, res, '500', null, null, { title: 'Có lỗi xảy ra', message: err.message || err });
     }
