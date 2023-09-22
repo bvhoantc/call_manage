@@ -36,5 +36,10 @@
 		"user": "admin",
 		"pwd": "admin",
 		"queueName": "icall"
+	},
+	"ipRecording" : {
+		"ip" : "https://crmdata.telehub.vn/api",
+		"user" : "0969684716",
+		"pass" : "123456"
 	}
 }
