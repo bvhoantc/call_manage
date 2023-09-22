@@ -27,11 +27,11 @@ var DFT = function ($) {
      * @type {boolean}
      */
     // Check domain 
-    if (window.location.hostname == "localhost") {
-        window._urlBinding = "https://test-chat-mail.telehub.vn"; // Chạy dưới localhost, 
-    } else {
-        window._urlBinding = window.origin + "/";
-    }
+    window._urlBinding = "https://test-chat-mail.telehub.vn"; // Chạy dưới localhost, 
+    // if (window.location.hostname == "localhost") {
+    // } else {
+    //     window._urlBinding = window.origin + "/";
+    // }
     var isLoging = false;
     window._domain = "bhs.local";
     console.log(window._urlBinding)
