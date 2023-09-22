@@ -14,5 +14,5 @@ node_modules
 /assets/recording
 /assets/uploads
 /.vscode/launch.json
-
+package-lock.json
 .env.local
