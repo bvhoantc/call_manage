@@ -51,7 +51,7 @@ exports.edit = function (req, res) {
             });
         },
         skillgroup: function (callback) {
-            getSkillGroupFromCisco(callback);
+            _Skills.find({}, callback);
         }
     },
         function (err, results) {
