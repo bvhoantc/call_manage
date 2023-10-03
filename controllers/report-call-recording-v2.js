@@ -55,7 +55,7 @@ exports.index = {
             let data = {
                 "startDate": startDate,
                 "endDate": endDate,
-                "nameCompany": "YAMAHA"
+                "nameCompany": "ICALL"
             };
             if(_.has(req.query, 'typeCall')) data.call = req.query.typeCall 
             if(_.has(req.query, 'remoteParty')) data.remoteParty = req.query.remoteParty // sdt KH
@@ -70,8 +70,7 @@ exports.index = {
                 url: `${_config.ipRecording.ip}/recordings/searchs/?page=${pageSize}&limit=${rows}&download=${download}`,
                 headers: { 
                     'Content-Type': 'application/json', 
-                    'Authorization': `Bearer ${token}`, 
-                    'Cookie': `jwt=${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 data : data
             };
