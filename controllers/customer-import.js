@@ -78,9 +78,9 @@ function importExcelData2MongoDB(filePath, fileNameReal, fields, req, res) {
     console.log("IMPORT_CUSTOMER read file done");
 
     // check cac dieu kien
-    if (excelData['My Sheet'].length > 50000) {
+    if (excelData['My Sheet'].length > 5000) {
         //res.json({ code: 500, message: "Vui lòng import data nhỏ hơn 50000!" })
-        res.send("Vui lòng import data nhỏ hơn 50000!")
+        res.send("Vui lòng import data nhỏ hơn 5000!")
     } else {
         let processExcelData = async () => {
             try {

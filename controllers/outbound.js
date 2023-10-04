@@ -142,13 +142,14 @@ function permissionConditions(req, callback) {
                         $match: {
                             $or: [
                                 {idAgent: userId},
-                                {assignTo: userId}
+                                {assignTo: userId},
+                                {idCampain: {$in: _.pluck(result, '_id')}}
                             ]
                         }
                     },
-                    {
-                        $match: {idCampain: {$in: _.pluck(result, '_id')}}
-                    }
+                    // {
+                    //     $match: {idCampain: {$in: _.pluck(result, '_id')}}
+                    // }
                 );
                 callback(null, cond);
             });
@@ -182,46 +183,6 @@ function getTickets(req, res, status, callback) {
                     }else {
                         callback(null, null);
                     }
-
-                    //if (!req.query.company) return callback(null, null);
-                    //var agg = [
-                    //    {$match: {_id: _.convertObjectId(req.query.company)}},
-                    //    {
-                    //        $lookup: {
-                    //            from: 'campains',
-                    //            localField: '_id',
-                    //            foreignField: 'idCompany',
-                    //            as: 'campain'
-                    //        }
-                    //    },
-                    //    {
-                    //        $project: {
-                    //            _id: 1,
-                    //            'campain._id': 1
-                    //        }
-                    //    },
-                    //    {$unwind: '$campain'}
-                    //];
-                    //
-                    //if (!!req.query.campain) agg.push({$match: {'campain._id': _.convertObjectId(req.query.campain)}});
-                    //agg.push(
-                    //    {
-                    //        $group: {
-                    //            _id: '$_id',
-                    //            campainId: {$push: '$campain._id'}
-                    //        }
-                    //    }
-                    //);
-                    //
-                    //_Company.aggregate(agg, function (err, result) {
-                    //    var value = _.pluck(result, 'campainId')[0];
-                    //    if (typeof value === 'undefined') {
-                    //        err = new Error('Không tìm thấy kết quả với khoá tìm kiếm !');
-                    //        return callback(err, null);
-                    //    }
-                    //
-                    //    callback(err, value);
-                    //});
                 },
                 updateBy: function (callback) {
                     // Lọc theo người cập nhật
@@ -313,6 +274,7 @@ function getTickets(req, res, status, callback) {
             if(!_.isEmpty(sort)) agg.push({$sort: sort});
 
             agg.push({$skip: (page - 1) * rows}, {$limit: rows});
+            console.log('aggg', JSON.stringify(agg));
             _Tickets.aggregate(agg, function (err, ticket) {
                 if (err) return callback(err, null);
 
