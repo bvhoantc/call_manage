@@ -63,11 +63,23 @@ exports.index = {
 exports.edit = function (req, res) {
     _Surveys.findById(req.params.survey, function (err, survey) {
         if(survey){
-            _.render(req, res, 'surveys-edit', {title: 'Chỉnh sửa nhóm câu hỏi khảo sát', current: survey, plugins: [['summernote']]}, !_.isNull(survey), err);
+            _SurveyQuestion.find({idSurvey: survey._id}, function(err, question) {
+                if(question){
+                    _.render(req, res, 'surveys-edit', {
+                        title: 'Chỉnh sửa nhóm câu hỏi khảo sát', 
+                        current: survey, 
+                        question: question,
+                        plugins: [['summernote']]
+                    },!_.isNull(survey), err);
+                }
+                else {
+                    res.json({code: 404, message: 'Page not found'});
+                }
+            })
         }else{
             res.json({code: 404, message: 'Page not found'});
         }
-    });
+    })
 };
 
 exports.create = function (req, res) {

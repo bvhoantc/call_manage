@@ -1,9 +1,10 @@
 var SurveyQuestionSchema = new mongoose.Schema({
     idSurvey: {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Survey', index: true},
     content: {type: String, required: true},
-    answerType: {type: Number, required: true},
-    questionType: {type: Number, required: true},
+    answerType: {type: Number},
+    questionType: {type: Number},
     isStart: {type: Number, default: 0},
+    priority: {type: Number, default: 0},
     idNextQuestion: {type: mongoose.Schema.Types.ObjectId, ref: 'SurveyQuestion', default: null},
     createBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null},
     updateBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null},

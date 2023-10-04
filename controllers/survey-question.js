@@ -9,9 +9,8 @@ exports.index = {
         var page = _.has(req.query, 'page') ? parseInt(req.query.page) : 1;
         var rows = _.has(req.query, 'rows') ? parseInt(req.query.rows) : 10;
 
-        var _query = _.has(req.query,'idSurvey') ? {idSurvey: req.query.idSurvey} : {};
-
-        _Surveys.findById(req.query.idSurvey, function (err, survey) {
+        var _query = _.has(req.query,'idSurvey') ? {idSurvey: new mongoose.Types.ObjectId(req.query.idSurvey)} : {};
+        _Surveys.find(req.query.idSurvey, function (err, survey) {
             if(survey){
                 _SurveyQuestion
                     .find(_query)
@@ -35,7 +34,9 @@ exports.index = {
                             , true, error);
                     });
             }else {
-                res.json({code: 404, message: 'Page not found'});
+                _.render(req, res, '/survey-question',{
+                    title: 'Danh sách câu hỏi khảo sát',
+                }, true, null)
             }
         });
     }
@@ -68,56 +69,62 @@ exports.edit = function (req, res) {
 exports.create = function (req, res) {
     req.body['createBy'] = req.session.user._id;
     req.body['created'] = new Date();
-
-    req.body['content'] = req.body['contentQ'];
+    req.body['status'] =  req.body['status'] == 'on' ? 1 : 0;
+    // req.body['content'] = req.body['contentQ'];
 
     var question = req.body;
-    question = _.cleanRequest(question, ['contentQ']);
+    // question = _.cleanRequest(question, ['contentQ']);
 
-    if(_.isEqual(req.body['idNextQuestion'], '')){
-        question['idNextQuestion'] = null;
-    }
+    // if(_.isEqual(req.body['idNextQuestion'], '')){
+    //     question['idNextQuestion'] = null;
+    // }
 
-    for(var i = 0; i < 10; i++){
-        question = _.cleanRequest(question, ['answer_'+i, 'answer_'+i+'_nextQuestion']);
-    }
+    // for(var i = 0; i < 10; i++){
+    //     question = _.cleanRequest(question, ['answer_'+i, 'answer_'+i+'_nextQuestion']);
+    // }
 
     _SurveyQuestion.create(question, function (error, sq) {
-        if(!error){
-            if(_.isEqual(req.body['answerType'],'1')  )
-            {
-                for(var i = 0; i < 10; i++){
-                    if(!_.isEqual(req.body['answer_'+i],'')){
-                        var _answer = {};
-                        _answer['content'] = _.has(req.body,'answer_'+i)? req.body['answer_'+i]: undefined;
-                        _answer['idNextQuestion'] = (_.has(req.body,'answer_'+i+'_nextQuestion') && !_.isEqual(req.body['answer_'+i+'_nextQuestion'], ''))? req.body['answer_'+i+'_nextQuestion']: undefined;
-                        _answer['idQuestion'] = sq._id;
-                        _answer['position'] = i;
-                        _SurveyAnswer.create(_answer);
-                    }
-                }
-            }
-            if(question.isStart == 1){
-                _SurveyQuestion.update({
-                    _id: {
-                        $ne: sq._id,
-                        // 03 Mar 2023 hoan only clear isStart of questions in this survey
-						idSurvey: req.query.idSurvey
-                    }
-                },
-                    {
-                        $set: {
-                            isStart:0
-                        }
-                    },
-                    {
-                        multi:true
-                    }, function(err) {
+        // if(!error){
+        //     if(_.isEqual(req.body['answerType'],'1')  )
+        //     {
+        //         for(var i = 0; i < 10; i++){
+        //             if(!_.isEqual(req.body['answer_'+i],'')){
+        //                 var _answer = {};
+        //                 _answer['content'] = _.has(req.body,'answer_'+i)? req.body['answer_'+i]: undefined;
+        //                 _answer['idNextQuestion'] = (_.has(req.body,'answer_'+i+'_nextQuestion') && !_.isEqual(req.body['answer_'+i+'_nextQuestion'], ''))? req.body['answer_'+i+'_nextQuestion']: undefined;
+        //                 _answer['idQuestion'] = sq._id;
+        //                 _answer['position'] = i;
+        //                 _SurveyAnswer.create(_answer);
+        //             }
+        //         }
+        //     }
+        //     if(question.isStart == 1){
+        //         _SurveyQuestion.update({
+        //             _id: {
+        //                 $ne: sq._id,
+        //                 // 03 Mar 2023 hoan only clear isStart of questions in this survey
+		// 				idSurvey: req.query.idSurvey
+        //             }
+        //         },
+        //             {
+        //                 $set: {
+        //                     isStart:0
+        //                 }
+        //             },
+        //             {
+        //                 multi:true
+        //             }, function(err) {
 
-                });
-            }
+        //         });
+        //     }
+        // }
+        if(error) {
+            res.json({
+                code: 500,
+                message: error.message
+            })
         }
-        res.json({code: (error ? 500 : 200), message: error ? error : sq});
+        else res.json({code: 200, message: sq});
     });
 };
 
@@ -236,28 +243,15 @@ exports.validate = function (req, res) {
 };
 
 exports.destroy = function (req, res) {
-    if (!_.isEqual(req.params.surveyquestion, 'all')) {
-        _async.waterfall([
-            function (next) {
-                _SurveyResult.remove({idQuestion: req.params.surveyquestion},{multi: true}, next);
-            },
-            function (result, next) {
-                _SurveyQuestion._deleteAll({$in: [req.params.surveyquestion]}, next);
-            }
-        ], function(err){
+    try {
+        _SurveyQuestion.deleteOne({_id: new mongoose.Types.ObjectId(req.params.surveyquestion)}, function(err, rs){
             res.json({code: (err ? 500 : 200), message: err ? err :""});
         });
-    }else{
-        _async.waterfall([
-            function (next) {
-                _SurveyResult.remove({idQuestion: {$in:req.body.ids.split(',')}},{multi: true}, next);
-            },
-            function (result, next) {
-                _SurveyQuestion._deleteAll({$in:req.body.ids.split(',')}, next);
-            }
-        ], function(err){
-            res.json({code: (err ? 500 : 200), message: err ? err :""});
-        });
+    } catch (error) {
+        res.json({
+            code: 500,
+            message: error.message || error
+        })
     }
 };
 

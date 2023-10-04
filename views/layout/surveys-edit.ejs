@@ -43,6 +43,42 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="status" class="col-sm-3 control-label">Câu hỏi khảo sát</label>
+                <div class="col-sm-6">
+                    <a class="btn btn-icon-text m-r-10 waves-effect waves-effect btn-primary" id="new-question"><i class="m-r-5 zmdi zmdi-plus-circle-o"></i> Thêm câu hỏi</a>
+                    <table class="table table-hover table-bordered table-fix" id="survey-question">
+                        <thead>
+                        <tr>
+                            <th class="col-sm-3 select-cell bgm-orange c-white text-center">Nội dung</th>
+                            <th class="col-sm-3 select-cell bgm-orange c-white text-center">Độ ưu tiên</th>
+                            <th class="col-sm-3 select-cell bgm-orange c-white text-center">Trạng thái</th>
+                            <th class="col-sm-3 select-cell bgm-orange c-white text-center">Tác vụ></th>
+                        </tr>
+                        </thead>
+                        <tbody class="ui-sortable">
+                        <%for(var i = 0; i < question.length;i++){%>
+                        <tr>
+                            <td class="p-l-40"><%- question[i].content %></td>
+                            <td class="select-cell text-center w-60 index" data-weight="<%- question[i]._id %>"><%- question[i].priority %></td>
+                            <td class="text-center">
+                                <div class="checkbox m-0">
+                                    <label>
+                                        <input id="subreasonStatus" name="status" type="checkbox" data-id="<%- question[i]._id %>" class="select-box" <%- (question[i].status ? 'checked' : ''); %> />
+                                        <i class="input-helper"></i>
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <a role="button" class="btn-flat-bg btn-edit" data-toggle="tooltip" data-placement="top" data-original-title="Sửa" data-id="<%- question[i]._id %>" data-url="/surveys" data-name="<%- question[i].content%>"><i class="zmdi zmdi-edit green f-23 "></i></a>
+                                <a role="button" class="btn-remove btn-flat-bg" data-toggle="tooltip" data-placement="top" data-original-title="Xoá" data-id="<%- question[i]._id %>" data-url="/surveys"><i class="zmdi zmdi-close red f-23 "></i></a>
+                            </td>
+                        </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="form-group m-b-0">
                 <div class="col-sm-offset-3 col-sm-10">
                     <a type="button" class="btn btn-default btn-icon-text m-t-10 m-r-10 waves-effect" href="/#surveys"><i class="m-r-5 zmdi zmdi-arrow-left"></i>Quay lại</a>
@@ -51,4 +87,55 @@
             </div>
         </form>
     </div>
+</div>
+
+<div class="modal fade" id="form-survey" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <form class="form-horizontal m-t-30" role="form" id="create-question">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Tạo câu hỏi khảo sát</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label">Câu hỏi</label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <input type="text" value="" class="form-control input-sm" name="content" placeholder="vd : Nội dung">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="col-sm-3 control-label">Độ ưu tiên<span
+                                        class="required">*</span></label>
+                            <div class="col-sm-8">
+                                <div class="fg-line">
+                                    <input id="validate-subreason-for-priority" type="number" value="" class="form-control input-sm validate[required,ajax[SubreasonPriorityCheck]]" name="priority" placeholder="vd : 1, 2, 3...">
+                                    <input id="validate-subreason-for-idReason" type="hidden" value="<%- current._id%>" name="idSurvey">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="status" class="col-sm-3 control-label">Trạng thái</label>
+                            <div class="col-sm-6">
+                                <div class="checkbox m-b-15">
+                                    <label>
+                                        <input type="checkbox" checked id="status" name="status">
+                                        <i class="input-helper"></i>
+                                        <span class="p-l-10" data-text-on="Không kích hoạt" data-text-off="Kích hoạt"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary waves-effect create">Xác nhận</button>
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Bỏ qua</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
