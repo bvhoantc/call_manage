@@ -644,7 +644,7 @@ module.exports = {
                 crud: createCRUD(req.originalUrl, req.session.menuAccess)
             }));
         } else {
-            if (!_.has(o, 'title')) o.title = 'BHS JSC';
+            if (!_.has(o, 'title')) o.title = 'ICALL JSC';
             let urlBinding = "https://" + req.hostname + '/system/web/apps/login/'
             _.extend(o, {
                 user: _.has(req.session, 'user') ? req.session.user : null,
